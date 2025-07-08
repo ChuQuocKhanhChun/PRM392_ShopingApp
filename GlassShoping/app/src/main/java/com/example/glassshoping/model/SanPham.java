@@ -1,8 +1,9 @@
 package com.example.glassshoping.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class SanPham {
+public class SanPham implements Serializable {
     int id;
     String name;
     String description;
@@ -10,12 +11,12 @@ public class SanPham {
     Double price;
     int stock;
     String image;
-    Date CreateOn;
+    String CreateOn;
 
     public SanPham() {
     }
 
-    public SanPham(int id, String name, String description, int category_id, Double price, int stock, String image, Date createOn) {
+    public SanPham(int id, String name, String description, int category_id, Double price, int stock, String image, String createOn) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -26,11 +27,21 @@ public class SanPham {
         this.CreateOn = createOn;
     }
 
-    public Date getCreateOn() {
+    public SanPham(int id, String name, String description, int categoryId, Double price, int stock, String image) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.category_id = categoryId;
+        this.price = price;
+        this.stock = stock;
+        this.image = image;
+    }
+
+    public String getCreateOn() {
         return CreateOn;
     }
 
-    public void setCreateOn(Date createOn) {
+    public void setCreateOn(String createOn) {
         CreateOn = createOn;
     }
 

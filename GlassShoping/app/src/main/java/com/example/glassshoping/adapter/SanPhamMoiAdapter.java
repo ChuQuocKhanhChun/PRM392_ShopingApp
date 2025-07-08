@@ -1,6 +1,7 @@
 package com.example.glassshoping.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,9 @@ import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.glassshoping.Interface.ItemClickListener;
 import com.example.glassshoping.R;
+import com.example.glassshoping.activity.ChitietActivity;
 import com.example.glassshoping.model.SanPham;
 import com.example.glassshoping.model.SanPhamModel;
 import com.example.glassshoping.model.SanPhamMoi;
@@ -39,11 +42,24 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.My
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         SanPhamMoi sanPhamMoi = array.get(position);
+        SanPham sanPham= new SanPham(sanPhamMoi.getId(),sanPhamMoi.getName(),sanPhamMoi.getDescription(),sanPhamMoi.getCategory_id(),sanPhamMoi.getPrice(),sanPhamMoi.getStock(),sanPhamMoi.getImage());
         holder.txtname.setText(sanPhamMoi.getName());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
 
         holder.txtgia.setText("Giá: "+decimalFormat.format(sanPhamMoi.getPrice())+"VNĐ");
         Glide.with(context).load(sanPhamMoi.getImage()).into(holder.imghinhanh);
+        holder.setItemClickListener(new ItemClickListener() {
+            @Override
+            public void onClick(View view, int pos, boolean isLongClick) {
+                if(!isLongClick){
+                    //click
+                    Intent intent = new Intent(context, ChitietActivity.class);
+                    intent.putExtra("chitiet",sanPham);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override
@@ -52,15 +68,25 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.My
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView txtgia, txtname;
         ImageView imghinhanh;
-
+        private ItemClickListener itemClickListener;
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
             txtgia=itemView.findViewById(R.id.itemsp_price);
             txtname = itemView.findViewById(R.id.itemsp_name);
             imghinhanh = itemView.findViewById(R.id.itemsp_image);
+            itemView.setOnClickListener(this);
+        }
+
+        public void setItemClickListener(ItemClickListener itemClickListener) {
+            this.itemClickListener = itemClickListener;
+        }
+
+        @Override
+        public void onClick(View v) {
+            itemClickListener.onClick(v, getAdapterPosition(),false);
         }
     }
 }

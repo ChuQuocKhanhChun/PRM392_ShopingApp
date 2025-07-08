@@ -1,6 +1,7 @@
 package com.example.glassshoping.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -81,9 +83,39 @@ public class MainActivity extends AppCompatActivity {
             ActionViewFilpper();
             getSanpham();
             getSPmoi();
+            getEventClick();
         }else{
             Toast.makeText(getApplicationContext(),"không có internet",Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void getEventClick() {
+        listViewManHinhChinh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        Intent trangchu = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(trangchu);
+                        break;
+                    case 1:
+                        Intent kinhthoitrang = new Intent(getApplicationContext(), KinhThoiTrangActivity.class);
+                        kinhthoitrang.putExtra("loai",3);
+                        startActivity(kinhthoitrang);
+                        break;
+                    case 2:
+                        Intent kinhram = new Intent(getApplicationContext(), KinhRamActivity.class);
+                        kinhram.putExtra("loai",2);
+                        startActivity(kinhram);
+                        break;
+                    case 3:
+                        Intent kinhcan = new Intent(getApplicationContext(), KinhCanActivity.class);
+                        kinhcan.putExtra("loai",1);
+                        startActivity(kinhcan);
+                        break;
+                }
+            }
+        });
     }
 
     private void getSPmoi() {
@@ -166,6 +198,9 @@ public class MainActivity extends AppCompatActivity {
         //khoi tao danh sach san pham
         mangsp = new ArrayList<>();
         mangSPmoi= new ArrayList<>();
+        if(Utils.manggiohang==null){
+            Utils.manggiohang= new ArrayList<>();
+        }
     }
     private boolean isConnected(Context context){
         ConnectivityManager connectivityManager =(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
