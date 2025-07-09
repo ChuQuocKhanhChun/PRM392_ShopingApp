@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.GlassShoping" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.GlassShoping" parent="Theme.MaterialComponents.DayNight.NoActionBar" >
+        <!-- Các cấu hình tùy chỉnh nếu có -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+
+        <!-- BẮT BUỘC: Text appearances -->
+        <item name="textAppearanceHeadline6">@style/TextAppearance.MaterialComponents.Headline6</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.MaterialComponents.Body1</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.MaterialComponents.Subtitle1</item>
+    </style>
 </resources>

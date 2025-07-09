@@ -3,14 +3,14 @@ package com.example.glassshoping.model;
 public class GioHang {
     int idsp;
     String tensp;
-    long giasp;
+    Double giasp;
     String hinhsp;
     int soluong;
 
     public GioHang() {
     }
 
-    public GioHang(int idsp, String tensp, long giasp, String hinhsp, int soluong) {
+    public GioHang(int idsp, String tensp, Double giasp, String hinhsp, int soluong) {
         this.idsp = idsp;
         this.tensp = tensp;
         this.giasp = giasp;
@@ -34,11 +34,11 @@ public class GioHang {
         this.tensp = tensp;
     }
 
-    public long getGiasp() {
+    public Double getGiasp() {
         return giasp;
     }
 
-    public void setGiasp(long giasp) {
+    public void setGiasp(Double giasp) {
         this.giasp = giasp;
     }
 

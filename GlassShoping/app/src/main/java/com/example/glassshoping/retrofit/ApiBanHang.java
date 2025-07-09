@@ -5,6 +5,8 @@ import io.reactivex.rxjava3.core.Observable;
 import com.example.glassshoping.model.SanPham2Model;
 import com.example.glassshoping.model.SanPhamModel;
 import com.example.glassshoping.model.SanPhamMoiModel;
+import com.example.glassshoping.model.User;
+import com.example.glassshoping.model.UserModel;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -28,5 +30,20 @@ public interface ApiBanHang {
         @Field("loai") int loai
     );
 
+    @POST("dangki.php")
+    @FormUrlEncoded
+    Observable<UserModel> dangKi(
+            @Field("email") String email,
+            @Field("password") String password,
+            @Field("username") String username,
+            @Field("mobile") String mobile
+    );
+    @POST("dangnhap.php")
+    @FormUrlEncoded
+    Observable<UserModel> dangNhap(
+            @Field("email") String email,
+            @Field("password") String password
+
+    );
 
 }
