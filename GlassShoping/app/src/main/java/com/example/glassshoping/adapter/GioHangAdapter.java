@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,6 +54,24 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
         holder.item_giohang_price.setText("Giá: "+decimalFormat.format(gioHang.getGiasp())+"VND");
         Double gia = gioHang.getGiasp()*gioHang.getSoluong();
         holder.item_giohang_totalprice.setText(decimalFormat.format(gia)+"VND");
+        holder.cbxcheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    Utils.mangmuahang.add(gioHang);
+
+
+                EventBus.getDefault().postSticky(new TinhTongEvent());
+                }else{
+                    for(int i=0;i<Utils.mangmuahang.size();i++){
+                        if(Utils.mangmuahang.get(i).getIdsp()== gioHang.getIdsp()){
+                            Utils.mangmuahang.remove(i);
+                            EventBus.getDefault().postSticky(new TinhTongEvent());
+                        }
+                    }
+                }
+            }
+        });
         holder.setListener(new IImangeClickListener() {
             @Override
             public void onItemClick(View view, int pos, int giatri) {
@@ -107,6 +127,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
         ImageView item_giohang_image, itemtru,itemcong;
         TextView item_giohang_name,item_giohang_price,item_giohang_soluong, item_giohang_totalprice;
         IImangeClickListener listener;
+        CheckBox cbxcheck;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             item_giohang_image= itemView.findViewById(R.id.item_giohang_img);
@@ -116,6 +137,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
             item_giohang_totalprice= itemView.findViewById(R.id.item_giohang_totalprice);
             itemtru= itemView.findViewById(R.id.item_giohang_tru);
             itemcong = itemView.findViewById(R.id.item_giohang_cong);
+            cbxcheck = itemView.findViewById(R.id.cbx_giohang_check);
             //eventclick
             itemcong.setOnClickListener(this);
             itemtru.setOnClickListener(this);

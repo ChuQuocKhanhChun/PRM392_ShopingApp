@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import okhttp3.internal.Util;
 
 public class ThanhToanActivity extends AppCompatActivity {
     Toolbar toolbar;
@@ -59,8 +60,8 @@ public class ThanhToanActivity extends AppCompatActivity {
             totalItem= 0;
         }else {
             totalItem= 0;
-            for (int i = 0; i < Utils.manggiohang.size(); i++) {
-                totalItem = totalItem + Utils.manggiohang.get(i).getSoluong();
+            for (int i = 0; i < Utils.mangmuahang.size(); i++) {
+                totalItem = totalItem + Utils.mangmuahang.get(i).getSoluong();
             }
         }
     }
@@ -87,17 +88,32 @@ public class ThanhToanActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Bạn chưa nhập địa chỉ", Toast.LENGTH_LONG).show();
                 }else{
                     //post data
-                    Log.d("test", new Gson().toJson(Utils.manggiohang));
+                    Log.d("test", new Gson().toJson(Utils.mangmuahang));
                     compositeDisposable.add(apiBanHang.createOder(Utils.user_current.getEmail(),
                             Utils.user_current.getMobile(),
                             String.valueOf(tongtin),
                             Utils.user_current.getId(),
-                            str_diachi,totalItem,new Gson().toJson(Utils.manggiohang))
+                            str_diachi,totalItem,new Gson().    toJson(Utils.mangmuahang))
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(userModel -> {
                                 Toast.makeText(getApplicationContext(), "Them don hang", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                for (int i = 0; i < Utils.mangmuahang.size(); i++) {
+                                    int idmuahang = Utils.mangmuahang.get(i).getIdsp();
+                                    for (int j = 0; j < Utils.manggiohang.size(); j++) {
+                                        if (Utils.manggiohang.get(j).getIdsp() == idmuahang) {
+                                            Utils.manggiohang.remove(j);
+                                            j--; // cần lùi lại vì đã remove
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                // Xóa danh sách mua hàng sau khi đã chuyển sang thanh toán
+                                Utils.mangmuahang.clear();
+
+                                // Cập nhật lại giao diện (nếu cần)
                                 startActivity(intent);
                             }, throwable -> {
                                 Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_LONG).show();

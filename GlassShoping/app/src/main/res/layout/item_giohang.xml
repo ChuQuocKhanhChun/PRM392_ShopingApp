@@ -109,6 +109,12 @@
                     android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
+            <CheckBox
+                android:padding="5dp"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/cbx_giohang_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
