@@ -15,6 +15,10 @@ public class LoaiSp {
         this.description = description;
         this.image= image;
     }
+    public LoaiSp(String name, String image){
+        this.name = name;
+        this.image= image;
+    }
 
     public String getImage() {
         return image;

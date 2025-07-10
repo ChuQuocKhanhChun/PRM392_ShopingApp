@@ -117,9 +117,9 @@ public class DangNhapActivity extends AppCompatActivity {
                 .subscribe( userModel -> {
                             if(userModel.isSuccess()){
                                 Paper.book().write("isLogin", isLogin);
-
-
                                 Utils.user_current= userModel.getResult().get(0);
+                                //lưu lại thogn tin ngươi dung
+                                Paper.book().write("user",userModel.getResult().get(0) );
                                 Intent dn = new Intent(getApplicationContext(),MainActivity.class);
                                 startActivity(dn);
                                 finish();

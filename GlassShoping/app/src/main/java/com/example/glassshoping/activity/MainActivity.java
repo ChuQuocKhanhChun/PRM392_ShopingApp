@@ -36,6 +36,7 @@ import com.example.glassshoping.model.SanPham;
 import com.example.glassshoping.model.SanPhamModel;
 import com.example.glassshoping.model.SanPhamMoi;
 import com.example.glassshoping.model.SanPhamMoiModel;
+import com.example.glassshoping.model.User;
 import com.example.glassshoping.retrofit.ApiBanHang;
 import com.example.glassshoping.retrofit.RetrofitClient;
 import com.example.glassshoping.utils.Utils;
@@ -48,6 +49,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.paperdb.Paper;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import retrofit2.Retrofit;
@@ -76,7 +78,11 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
-
+        Paper.init(this);
+        if(Paper.book().read("user")!=null){
+            User user = Paper.book().read("user");
+            Utils.user_current = user;
+        }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -122,6 +128,13 @@ public class MainActivity extends AppCompatActivity {
                         kinhcan.putExtra("loai",1);
                         startActivity(kinhcan);
                         break;
+                    case 5:
+                        //xoa key user
+                        Paper.book().delete("user");
+                        Intent dangnhap = new Intent(getApplicationContext(), DangNhapActivity.class);
+                        startActivity(dangnhap);
+                        finish();
+                        break;
 
                 }
             }
@@ -152,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
                                 sanPhamModel -> {
                                     if(sanPhamModel.isSuccess()){
                                         mangsp= sanPhamModel.getResult();
+                                        mangsp.add(new LoaiSp("Đăng xuất","https://static.vecteezy.com/system/resources/previews/006/606/705/non_2x/sign-out-logout-icon-in-circle-line-vector.jpg"));
                                         //khoi tao adapter
                                         loaiSpAdapter = new LoaiSpAdapter(getApplicationContext(), mangsp);
                                         listViewManHinhChinh.setAdapter(loaiSpAdapter);
