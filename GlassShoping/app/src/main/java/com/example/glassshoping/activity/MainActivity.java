@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     SanPhamMoiAdapter sanPhamMoiAdapter;
     NotificationBadge notificationBadge;
     FrameLayout frameLayout;
+    ImageView search_img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,24 +100,29 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
+                        Intent donhang = new Intent(getApplicationContext(), XemDonActivity.class);
+                        startActivity(donhang);
+                        break;
+                    case 1:
                         Intent trangchu = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(trangchu);
                         break;
-                    case 1:
+                    case 2:
                         Intent kinhthoitrang = new Intent(getApplicationContext(), KinhThoiTrangActivity.class);
                         kinhthoitrang.putExtra("loai",3);
                         startActivity(kinhthoitrang);
                         break;
-                    case 2:
+                    case 3:
                         Intent kinhram = new Intent(getApplicationContext(), KinhRamActivity.class);
                         kinhram.putExtra("loai",2);
                         startActivity(kinhram);
                         break;
-                    case 3:
+                    case 4:
                         Intent kinhcan = new Intent(getApplicationContext(), KinhCanActivity.class);
                         kinhcan.putExtra("loai",1);
                         startActivity(kinhcan);
                         break;
+
                 }
             }
         });
@@ -201,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawerlayout);
         notificationBadge = findViewById(R.id.menu_sl);
         frameLayout = findViewById(R.id.framegiohang);
+        search_img = findViewById(R.id.img_search);
         //khoi tao danh sach san pham
         mangsp = new ArrayList<>();
         mangSPmoi= new ArrayList<>();
@@ -221,7 +228,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        search_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent search = new Intent(getApplicationContext(), SearchActivity.class);
+                startActivity(search);
+            }
+        });
     }
 
     @Override

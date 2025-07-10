@@ -2,6 +2,7 @@ package com.example.glassshoping.retrofit;
 
 import io.reactivex.rxjava3.core.Observable;
 
+import com.example.glassshoping.model.DonHangModel;
 import com.example.glassshoping.model.SanPham2Model;
 import com.example.glassshoping.model.SanPhamModel;
 import com.example.glassshoping.model.SanPhamMoiModel;
@@ -62,6 +63,18 @@ public interface ApiBanHang {
             @Field("soluong") int soluong,
             @Field("chitiet") String chitiet
 
+
+    );
+    @POST("xemdonhang.php")
+    @FormUrlEncoded
+    Observable<DonHangModel> xemdonhang(
+            @Field("iduser") int iduser
+
+    );
+    @POST("timkiem.php")
+    @FormUrlEncoded
+    Observable<SanPham2Model> timkiem(
+            @Field("keyword") String keyword
 
     );
 }

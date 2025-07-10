@@ -55,9 +55,13 @@ public class ThanhToanActivity extends AppCompatActivity {
     }
 
     private void countItem() {
-         totalItem= 0;
-        for(int i=0;i<Utils.manggiohang.size();i++){
-            totalItem= totalItem+Utils.manggiohang.get(i).getSoluong();
+        if(Utils.manggiohang==null){
+            totalItem= 0;
+        }else {
+            totalItem= 0;
+            for (int i = 0; i < Utils.manggiohang.size(); i++) {
+                totalItem = totalItem + Utils.manggiohang.get(i).getSoluong();
+            }
         }
     }
 

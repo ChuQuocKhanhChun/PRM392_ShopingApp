@@ -22,24 +22,38 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="#ff00dfff"
                 app:title="Glass Shop">
-                <FrameLayout
-                    android:id="@+id/framegiohang"
-                    android:layout_marginRight="10dp"
+
+                <LinearLayout
                     android:layout_gravity="right"
+                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <com.nex3z.notificationbadge.NotificationBadge
-                        android:id="@+id/menu_sl"
-                        android:layout_gravity="top|right"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"/>
+                    android:layout_height="?attr/actionBarSize">
                     <ImageView
-                        android:layout_marginTop="15dp"
+                        android:id="@+id/img_search"
                         android:layout_marginRight="15dp"
-                        android:src="@drawable/outline_add_shopping_cart_24"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"/>
-                </FrameLayout>
+                        android:src="@drawable/outline_search_24"
+                        android:layout_width="30dp"
+                        android:layout_height="?attr/actionBarSize"/>
+                    <FrameLayout
+                        android:id="@+id/framegiohang"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <com.nex3z.notificationbadge.NotificationBadge
+                            android:id="@+id/menu_sl"
+                            android:layout_gravity="top|right"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"/>
+                        <ImageView
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="15dp"
+                            android:src="@drawable/outline_add_shopping_cart_24"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"/>
+                    </FrameLayout>
+                </LinearLayout>
+
             </androidx.appcompat.widget.Toolbar>
             <ViewFlipper
                 android:id="@+id/viewfilppermanhinhchinh"

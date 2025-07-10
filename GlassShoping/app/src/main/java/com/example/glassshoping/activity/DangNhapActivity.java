@@ -76,7 +76,7 @@ public class DangNhapActivity extends AppCompatActivity {
                     //save
                     Paper.book().write("email", str_email);
                     Paper.book().write("pass", str_pass);
-
+                    dangNhap(str_email,str_pass);
                 }
             }
         });
@@ -101,9 +101,9 @@ public class DangNhapActivity extends AppCompatActivity {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                        dangNhap();    
+                        dangNhap(Paper.book().read("email"),Paper.book().read("pass"));
                         }
-                    });
+                    },1000);
                 }
             }
         }
