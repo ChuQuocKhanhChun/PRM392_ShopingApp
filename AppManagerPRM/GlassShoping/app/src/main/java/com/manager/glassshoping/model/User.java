@@ -6,6 +6,15 @@ public class User {
     String username;
     String password;
     String mobile;
+    String uid;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public User() {
     }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "985149279289",
+    "project_id": "prm392glassshop",
+    "storage_bucket": "prm392glassshop.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985149279289:android:d58559f65f36c6bddcd1e8",
+        "android_client_info": {
+          "package_name": "com.manager.glassshoping"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpOFllUJNPEkbmeqDVkMJYFQVQUVnFwpQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

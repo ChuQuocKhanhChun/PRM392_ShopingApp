@@ -39,7 +39,8 @@ public interface ApiBanHang {
             @Field("email") String email,
             @Field("password") String password,
             @Field("username") String username,
-            @Field("mobile") String mobile
+            @Field("mobile") String mobile,
+            @Field("uid") String uid
     );
     @POST("dangnhap.php")
     @FormUrlEncoded
@@ -89,6 +90,30 @@ public interface ApiBanHang {
             @Field("stock") int stock,
             @Field("image") String image);
     @Multipart
-    @POST("retrofit_example/upload_image.php")
+    @POST("upload.php")
     Call<MessageModel> uploadFile(@Part MultipartBody.Part file);
+
+
+    @POST("xoaSP.php")
+    @FormUrlEncoded
+    Observable<MessageModel> xoaSP(
+            @Field("id") int id
+
+    );
+    @POST("update.php")
+    @FormUrlEncoded
+    Observable<MessageModel> updateSP(
+            @Field("id") int id,
+            @Field("name") String name,
+            @Field("category_id") int category_id,
+            @Field("price") Double price,
+            @Field("description") String description,
+            @Field("stock") int stock,
+            @Field("image") String image);
+    @POST("updatetk.php")
+    @FormUrlEncoded
+    Observable<MessageModel> updateToken(
+            @Field("id") int id,
+            @Field("token") String token);
+
 }

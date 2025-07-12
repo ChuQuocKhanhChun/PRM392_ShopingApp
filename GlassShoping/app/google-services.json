@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "985149279289",
+    "project_id": "prm392glassshop",
+    "storage_bucket": "prm392glassshop.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985149279289:android:d5ec6b746aeba374dcd1e8",
+        "android_client_info": {
+          "package_name": "com.example.glassshoping"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "985149279289-n014g14rhtrnc4b3ct5e1i25abgd406d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpOFllUJNPEkbmeqDVkMJYFQVQUVnFwpQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "985149279289-n014g14rhtrnc4b3ct5e1i25abgd406d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985149279289:android:d58559f65f36c6bddcd1e8",
+        "android_client_info": {
+          "package_name": "com.manager.glassshoping"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "985149279289-1pk5pgk4n05bo4973i0ivv1889s7jpva.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.manager.glassshoping",
+            "certificate_hash": "e46a7c3118dde7f5851c19e3ed517ea4e3d0fa7c"
+          }
+        },
+        {
+          "client_id": "985149279289-n014g14rhtrnc4b3ct5e1i25abgd406d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpOFllUJNPEkbmeqDVkMJYFQVQUVnFwpQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "985149279289-n014g14rhtrnc4b3ct5e1i25abgd406d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

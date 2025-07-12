@@ -1,8 +1,9 @@
 package com.manager.glassshoping.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class SanPhamMoi {
+public class SanPhamMoi implements Serializable {
     int id;
     String name;
     String description;

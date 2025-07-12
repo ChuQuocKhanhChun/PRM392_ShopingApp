@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
@@ -20,6 +21,11 @@ import com.example.glassshoping.R;
 import com.example.glassshoping.retrofit.ApiBanHang;
 import com.example.glassshoping.retrofit.RetrofitClient;
 import com.example.glassshoping.utils.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import io.paperdb.Paper;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -32,6 +38,8 @@ public class DangNhapActivity extends AppCompatActivity {
     EditText email, pass;
     AppCompatButton btndangnhap;
     ApiBanHang apiBanHang;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     boolean isLogin = false;
     @Override
@@ -76,7 +84,21 @@ public class DangNhapActivity extends AppCompatActivity {
                     //save
                     Paper.book().write("email", str_email);
                     Paper.book().write("pass", str_pass);
-                    dangNhap(str_email,str_pass);
+                    if(firebaseUser!=null){
+                        dangNhap(str_email,str_pass);
+
+                    }else {
+                        //user đã signout
+                        firebaseAuth.signInWithEmailAndPassword(str_email,str_pass).addOnCompleteListener(DangNhapActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                    dangNhap(str_email,str_pass);
+
+                                }
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -91,6 +113,8 @@ public class DangNhapActivity extends AppCompatActivity {
         pass=findViewById(R.id.dnPassword);
         btndangnhap=findViewById(R.id.btndangnhap);
         txtquenmk=findViewById(R.id.txtquenmk);
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
         //read data
         if(Paper.book().read("email")!=null&& Paper.book().read("pass")!=null){
             email.setText(Paper.book().read("email"));
@@ -101,7 +125,7 @@ public class DangNhapActivity extends AppCompatActivity {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                        dangNhap(Paper.book().read("email"),Paper.book().read("pass"));
+                            dangNhap(Paper.book().read("email"),Paper.book().read("pass"));
                         }
                     },1000);
                 }

@@ -8,12 +8,18 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.manager.glassshoping.R;
 import com.manager.glassshoping.retrofit.ApiBanHang;
 import com.manager.glassshoping.retrofit.RetrofitClient;
@@ -28,6 +34,7 @@ public class DangKiActivity extends AppCompatActivity {
     EditText email,pass,repass,mobile,username;
     AppCompatButton button;
     ApiBanHang apiBanHang;
+    FirebaseAuth firebaseAuth;
     CompositeDisposable compositeDisposable= new CompositeDisposable();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,28 +79,46 @@ public class DangKiActivity extends AppCompatActivity {
             if(!str_pass.equals(str_repass)){
                     Toast.makeText(getApplicationContext(), "Mật khẩu chưa khớp!", Toast.LENGTH_SHORT).show();
             }else {
-                compositeDisposable.add(apiBanHang.dangKi(str_email,str_pass,str_username,str_mobile)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe( userModel -> {
+                firebaseAuth = FirebaseAuth.getInstance();
+                firebaseAuth.createUserWithEmailAndPassword(str_email,str_pass)
+                        .addOnCompleteListener(DangKiActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                                    if(user!=null){
+                                        postData(str_email,str_pass,str_username, str_mobile, user.getUid());
+                                    }
+                                }else {
+                                    Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+
+                                }
+                            }
+                        });
+            }
+        }
+
+    }
+    private void postData(String str_email, String str_pass,String str_username,String str_mobile,String uid ){
+        compositeDisposable.add(apiBanHang.dangKi(str_email,str_pass,str_username,str_mobile,uid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe( userModel -> {
                             if(userModel.isSuccess()){
                                 Utils.user_current.setEmail(str_email);
                                 Utils.user_current.setPassword(str_pass);
 
-                               Intent dangnhap = new Intent(getApplicationContext(),DangNhapActivity.class);
-                               startActivity(dangnhap);
-                               finish();
+                                Intent dangnhap = new Intent(getApplicationContext(),DangNhapActivity.class);
+                                startActivity(dangnhap);
+                                finish();
                             }else{
                                 Toast.makeText(getApplicationContext(), userModel.getMessage(), Toast.LENGTH_SHORT).show();
                             }
 
                         },
-                                throwable -> {
-                                    Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                }));
-            }
-        }
-
+                        throwable -> {
+                            Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        }));
     }
 
     private void initView() {

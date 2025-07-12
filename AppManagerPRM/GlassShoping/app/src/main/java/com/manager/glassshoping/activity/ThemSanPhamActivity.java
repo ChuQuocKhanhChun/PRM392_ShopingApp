@@ -21,6 +21,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -29,6 +30,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.manager.glassshoping.R;
 import com.manager.glassshoping.databinding.ActivityThemSanPhamBinding;
 import com.manager.glassshoping.model.MessageModel;
+import com.manager.glassshoping.model.SanPhamMoi;
 import com.manager.glassshoping.retrofit.ApiBanHang;
 import com.manager.glassshoping.retrofit.RetrofitClient;
 import com.manager.glassshoping.utils.Utils;
@@ -52,12 +54,15 @@ import soup.neumorphism.LightSource;
 import soup.neumorphism.NeumorphCardView;
 
 public class ThemSanPhamActivity extends AppCompatActivity {
+    Toolbar toolbar;
     Spinner spinner;
     int loai=0;
     ActivityThemSanPhamBinding binding;
     ApiBanHang apiBanHang;
     String mediaPath;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
+    SanPhamMoi sanPhamSua;
+    boolean flag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +76,31 @@ public class ThemSanPhamActivity extends AppCompatActivity {
             return insets;
         });
         initView();
+        Toolbar toolbar = findViewById(R.id.toolbarthemsp);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Thêm sản phẩm"); // đặt tiêu đề tại đây
+        toolbar.setNavigationOnClickListener(v -> finish());
+
         initData();
+        Intent intent = getIntent();
+        sanPhamSua= (SanPhamMoi) intent.getSerializableExtra("sua");
+        if(sanPhamSua==null){
+            //themmoi
+            flag=false;
+        }else {
+            //sua
+            flag=true;
+            binding.btnAddSp.setText("Sửa Sản Phẩm");
+            binding.txttenspadd.setText(sanPhamSua.getName());
+            binding.txtHinhanhAdd.setText(sanPhamSua.getImage());
+            binding.txtMotaAdd.setText(sanPhamSua.getDescription());
+            binding.txtGiasanphamAdd.setText(String.valueOf(sanPhamSua.getPrice()));
+            binding.txtSoluongAdd.setText(String.valueOf(sanPhamSua.getStock()));
+            binding.spinerSoluongAdd.setSelection(sanPhamSua.getCategory_id());
+        }
+
+
     }
 
     private void initData() {
@@ -96,7 +125,12 @@ public class ThemSanPhamActivity extends AppCompatActivity {
         binding.btnAddSp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                themSanPham();
+                if(!flag){
+                    themSanPham();
+                }else {
+                    suaSanPham();
+                }
+
             }
         });
         binding.imgcamera.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +145,34 @@ public class ThemSanPhamActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void suaSanPham() {
+        String name = binding.txttenspadd.getText().toString().trim();
+        String str_price = binding.txtGiasanphamAdd.getText().toString().trim();
+        String str_mota = binding.txtMotaAdd.getText().toString().trim();
+        String str_img = binding.txtHinhanhAdd.getText().toString().trim();
+        String str_solg = binding.txtSoluongAdd.getText().toString().trim();
+        if(TextUtils.isEmpty(name)|| TextUtils.isEmpty(str_price)||TextUtils.isEmpty(str_mota)||TextUtils.isEmpty(str_img)||TextUtils.isEmpty(str_solg)||loai==0){
+            Toast.makeText(getApplicationContext(), "Bạn cần nhập đủ thông tin ", Toast.LENGTH_LONG).show();
+        }else {
+            compositeDisposable.add(apiBanHang.updateSP(sanPhamSua.getId(),name,
+                            loai,
+                            Double.parseDouble(str_price),
+                            str_mota,
+                            Integer.parseInt(str_solg),
+                            str_img).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe( messageModel -> {
+                        if(messageModel.isSuccess()){
+                            Toast.makeText(getApplicationContext(),messageModel.getMessage(),Toast.LENGTH_LONG).show();
+                        }else{
+                            Toast.makeText(getApplicationContext(),messageModel.getMessage(),Toast.LENGTH_LONG).show();
+                        }
+                    }, throwable -> {
+                        Toast.makeText(getApplicationContext(),throwable.getMessage(),Toast.LENGTH_LONG).show();
+                    }));
+        }
     }
 
     @Override
@@ -143,7 +205,7 @@ public class ThemSanPhamActivity extends AppCompatActivity {
         File file = new File(getPath(uri));
         // Parsing any Media type file
         RequestBody requestBody1 = RequestBody.create(MediaType.parse("*/*"), file);
-        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file1", file.getName(), requestBody1);
+        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", file.getName(), requestBody1);
         ApiBanHang getResponse = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
         Call<MessageModel> call = getResponse.uploadFile(fileToUpload1);
         call.enqueue(new Callback< MessageModel >() {
@@ -154,7 +216,7 @@ public class ThemSanPhamActivity extends AppCompatActivity {
                 MessageModel serverResponse = response.body();
                 if (serverResponse != null) {
                     if (serverResponse.isSuccess()) {
-                        Toast.makeText(getApplicationContext(), serverResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        binding.txtHinhanhAdd.setText(serverResponse.getFilename());
                     } else {
                         Toast.makeText(getApplicationContext(), serverResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -197,9 +259,19 @@ public class ThemSanPhamActivity extends AppCompatActivity {
                     }));
         }
     }
-
+    private void ActionToolBar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
     private void initView() {
         spinner = findViewById(R.id.spiner_soluong_add);
+        toolbar = findViewById(R.id.toolbarthemsp);
     }
 
 

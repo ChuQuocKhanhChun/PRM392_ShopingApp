@@ -3,6 +3,7 @@ package com.example.glassshoping.retrofit;
 import io.reactivex.rxjava3.core.Observable;
 
 import com.example.glassshoping.model.DonHangModel;
+import com.example.glassshoping.model.MessageModel;
 import com.example.glassshoping.model.SanPham2Model;
 import com.example.glassshoping.model.SanPhamModel;
 import com.example.glassshoping.model.SanPhamMoiModel;
@@ -37,7 +38,8 @@ public interface ApiBanHang {
             @Field("email") String email,
             @Field("password") String password,
             @Field("username") String username,
-            @Field("mobile") String mobile
+            @Field("mobile") String mobile,
+            @Field("uid") String uid
     );
     @POST("dangnhap.php")
     @FormUrlEncoded
@@ -77,4 +79,9 @@ public interface ApiBanHang {
             @Field("keyword") String keyword
 
     );
+    @POST("updatetk.php")
+    @FormUrlEncoded
+    Observable<MessageModel> updateToken(
+            @Field("id") int id,
+            @Field("token") String token);
 }

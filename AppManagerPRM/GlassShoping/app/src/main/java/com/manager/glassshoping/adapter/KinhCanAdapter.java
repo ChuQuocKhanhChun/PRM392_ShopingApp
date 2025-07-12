@@ -20,7 +20,6 @@ import com.manager.glassshoping.model.SanPham;
 
 import java.text.DecimalFormat;
 import java.util.List;
-
 public class KinhCanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context context;
     List<SanPham> array;

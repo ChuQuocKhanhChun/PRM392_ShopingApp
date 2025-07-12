@@ -1,11 +1,16 @@
 package com.manager.glassshoping.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -19,6 +24,8 @@ import android.widget.ViewFlipper;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -28,6 +35,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.manager.glassshoping.R;
 import com.manager.glassshoping.adapter.LoaiSpAdapter;
 import com.manager.glassshoping.adapter.SanPhamMoiAdapter;
@@ -88,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        getToken();
         Anhxa();
         ActionBar();
         if(isConnected(this)){
@@ -98,6 +109,45 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Toast.makeText(getApplicationContext(),"không có internet",Toast.LENGTH_LONG).show();
         }
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("TOKEN", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+
+                    // Get new FCM token
+                    String token = task.getResult();
+                    Log.d("TOKEN", "Token: " + token);
+                    // Bạn có thể gửi token lên server nếu cần
+                });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
+                        1001);
+            }
+        }
+
+    }
+    public void getToken(){
+        FirebaseMessaging.getInstance().getToken()
+                .addOnSuccessListener(new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        if(!TextUtils.isEmpty(s)){
+                            compositeDisposable.add(apiBanHang.updateToken(Utils.user_current.getId(), s)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(messageModel -> {
+
+                                    }, throwable -> {
+                                        Log.d("Log", throwable.getMessage());
+                                    }));
+                        }
+                    }
+                });
     }
 
     private void getEventClick() {
@@ -135,7 +185,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 6:
                         //xoa key user
+
                         Paper.book().delete("user");
+                        FirebaseAuth.getInstance().signOut();
                         Intent dangnhap = new Intent(getApplicationContext(), DangNhapActivity.class);
                         startActivity(dangnhap);
                         finish();
