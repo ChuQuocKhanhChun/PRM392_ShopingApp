@@ -1,8 +1,11 @@
 package com.manager.glassshoping.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class User {
     int id;
     String email;
+    @SerializedName("full_name")
     String username;
     String password;
     String mobile;

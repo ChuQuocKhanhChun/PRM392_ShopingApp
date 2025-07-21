@@ -1,11 +1,23 @@
 package com.example.glassshoping.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class User {
     int id;
     String email;
+    @SerializedName("full_name")
     String username;
     String password;
     String mobile;
+    String uid;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public User() {
     }
