@@ -208,8 +208,11 @@ public class MainActivity extends AppCompatActivity {
                             mangSPmoi = sanPhamMoiModel.getResult();
                             sanPhamMoiAdapter = new SanPhamMoiAdapter(getApplicationContext(), mangSPmoi);
                             recyclerViewManHinhChinh.setAdapter(sanPhamMoiAdapter);
+                        }else{
+                            Log.e("API_ERROR", "Server trả về success = false");
                         }
                 }, throwable -> {
+                    Log.e("API_ERROR", "Lỗi khi lấy dữ liệu", throwable);
                     Toast.makeText(getApplicationContext(),"Không kết nối được server"+ throwable.getMessage(),Toast.LENGTH_LONG).show();
                 }));
     }

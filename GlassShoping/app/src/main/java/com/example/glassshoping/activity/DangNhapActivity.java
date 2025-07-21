@@ -37,9 +37,9 @@ public class DangNhapActivity extends AppCompatActivity {
     TextView txtdangki, txtquenmk;
     EditText email, pass;
     AppCompatButton btndangnhap;
-    ApiBanHang apiBanHang;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
+    ApiBanHang apiBanHang;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     boolean isLogin = false;
     @Override
@@ -135,6 +135,9 @@ public class DangNhapActivity extends AppCompatActivity {
 
     private void dangNhap(String str_email, String str_pass ) {
 
+
+
+
         compositeDisposable.add(apiBanHang.dangNhap(str_email,str_pass)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -148,7 +151,7 @@ public class DangNhapActivity extends AppCompatActivity {
                                 startActivity(dn);
                                 finish();
                             }else{
-
+                                Toast.makeText(getApplicationContext(), "Sai email hoặc mật khẩu ", Toast.LENGTH_SHORT).show();
                             }
                         },
                         throwable -> {

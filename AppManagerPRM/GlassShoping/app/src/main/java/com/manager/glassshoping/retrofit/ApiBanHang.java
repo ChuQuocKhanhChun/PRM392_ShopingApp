@@ -116,4 +116,10 @@ public interface ApiBanHang {
             @Field("id") int id,
             @Field("token") String token);
 
+    @POST("update_status_order.php")
+    @FormUrlEncoded
+    Observable<MessageModel> updatestatusOrder(
+            @Field("idorder") int idorder,
+            @Field("status") int status);
+
 }
